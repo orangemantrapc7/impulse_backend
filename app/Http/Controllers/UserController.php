@@ -72,6 +72,54 @@ class UserController extends Controller
         }
     }
 
+    public function updateFcm(Request $request)
+    {
+        // Validate the request data, including mobile_uid, device_id, and device_token
+        try {
+            $validation = Validator::make($request->all(), [
+
+                'device_token' => 'required',
+                'mobile_uid' => 'required',
+            ]);
+            if ($validation->fails()) {
+                $response = [
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validation->errors(),
+                ];
+                return response()->json($response, 200);
+            }
+            $chk_user = User::where('mobile_uid', $request->mobile_uid)->first();
+           
+            if (empty($chk_user)) {
+              
+                $response = [
+                    'status' => false,
+                    'data' => null,
+                    'message' => 'This user id dose not exit.',
+                ];
+                return response()->json($response, 200);
+            }    
+            $mobile_uid = $request->mobile_uid;
+            $device_token = $request->device_token;
+           
+            $user = User::where('mobile_uid',$mobile_uid)->update(['device_token'=>$device_token]);
+            $response = [
+                'status' => true,
+                'data' => $user,
+                'message' => 'successfully',
+            ];
+            return response()->json($response, 200);
+        } catch (RequestException $exception) {
+            $response = [
+                'status' => false,
+                'message' => 'something went worng',
+                'data' => null,
+            ];
+            return response()->json($response, 200);
+        }
+    }
+
 
     /**
      * Display the specified resource.

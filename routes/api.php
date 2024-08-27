@@ -29,3 +29,4 @@ Route::post('/add_member', [UserController::class, 'addMember']);
 Route::post('/group_list', [UserController::class, 'groupList']);
 Route::post('/user_group_list', [UserController::class, 'usergroupList']);
 Route::post('/group_user_list', [UserController::class, 'groupuserList']);
+Route::post('/update_fcm', [UserController::class, 'updateFcm']);
